@@ -1,6 +1,6 @@
-use std::fs;
-use std::error::Error;
 use std::env;
+use std::error::Error;
+use std::fs;
 
 pub struct Config {
     pub query: String,
@@ -9,7 +9,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> { 
+    pub fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
@@ -19,7 +19,11 @@ impl Config {
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
-        Ok(Config { query, filename, case_sensitive })
+        Ok(Config {
+            query,
+            filename,
+            case_sensitive,
+        })
     }
 }
 
@@ -51,7 +55,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 
-
 fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let query = query.to_lowercase();
     let mut results = Vec::new();
@@ -78,10 +81,7 @@ safe, fast, productive.
 Pick three.
 Dust tape.";
 
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
     }
 
     #[test]
